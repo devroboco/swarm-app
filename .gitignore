@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+.venv/
+venv/
+.env
+.python-version
+.coverage
+dist/
+build/
+
+
+# Docker / logs
+*.log
+*.tmp
+tmp/
+*.pid
+
+# Sistema/IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Swarm (NÃO versionar segredos reais)
+secret.txt
+message.txt
+/run/

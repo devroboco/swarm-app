@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  backend:
+    image: backend:1.0
+    networks: [app-net]
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 5s
+    configs:
+      - source: app-message
+        target: /run/configs/app-message
+        mode: 0444
+    secrets:
+      - app-token
+
+  frontend:
+    image: frontend:1.0
+    networks: [app-net]
+    ports:
+      - "8080:8080"
+    environment:
+      - BACKEND_URL=http://backend:5000/info
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 5s
+    configs:
+      - source: app-message
+        target: /run/configs/app-message
+        mode: 0444
+    secrets:
+      - app-token
+
+networks:
+  app-net:
+    external: true
+
+configs:
+  app-message:
+    external: true
+
+secrets:
+  app-token:
+    external: true
