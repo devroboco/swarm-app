@@ -27,8 +27,8 @@ swarm-demo-app/
    ```
 3. **Crie Config e Secret (opcional)**
    ```bash
+   echo -n "MY_FAKE_TOKEN_123" | docker secret create app-token -
    echo "Demo Swarm - App Message" | docker config create app-message -
-   printf "MY_FAKE_TOKEN_123" | docker secret create app-token -
    ```
 4. **Build das imagens (no manager)**
    ```bash
@@ -42,7 +42,7 @@ swarm-demo-app/
    ```
 6. **Testes de balanceamento**
    ```bash
-   curl -s http://localhost:8080 | jq
+   Acesse: localhost:8080
    ```
    Observe `frontend_hostname` alternando entre réplicas (balanceamento externo) e
    os `backend_calls` alternando hostnames do backend (balanceamento interno).
@@ -56,7 +56,19 @@ swarm-demo-app/
    docker service update --update-parallelism 1 --update-delay 5s mystack_frontend
    # docker service rollback mystack_frontend
    ```
-
+9. **Deploy do Portainer**
+   ```bash
+   docker stack deploy -c portainer-agent-stack.yml portainer
+   docker stack services portainer
+   ```
+9. **Descobrir o IP do manager**
+   ```bash
+   docker node inspect self --format '{{.Status.Addr}}'
+   ```
+9. **Acessar a interface web do Portainer**
+   ```bash
+   Acesse: http://<IP_DO_MANAGER>:9000
+   ```   
 ## Como funciona o balanceamento
 
 - **Externo (frontend):** o Swarm publica a porta (8080) e usa **Ingress + Routing Mesh** para distribuir
